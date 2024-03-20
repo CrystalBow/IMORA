@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Imora;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,6 +9,8 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private Texture2D playerTexture;
+    private GameObject player = new GameObject(0);
 
     public Game1()
     {
@@ -26,6 +29,12 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        playerTexture = Content.Load<Texture2D>("MuSprite");
+
+        player.AddComponent(new Transform(100, 100));
+        player.AddComponent(new Sprite(_spriteBatch, playerTexture, Color.White, 4.0f, 4.0f));
+        player.AddComponent(new SinMover(5.0f, 1.0f));
+        player.Ready();
 
         // TODO: use this.Content to load your game content here
     }
@@ -38,6 +47,8 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
 
+        player.Update(gameTime);
+
         base.Update(gameTime);
     }
 
@@ -46,6 +57,10 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
+
+        _spriteBatch.Begin(samplerState : SamplerState.PointClamp);
+        player.GetComponent<Sprite>().Draw();
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }
