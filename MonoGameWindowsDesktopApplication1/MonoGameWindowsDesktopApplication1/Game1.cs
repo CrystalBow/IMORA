@@ -32,7 +32,7 @@ public class Game1 : Game
         playerTexture = Content.Load<Texture2D>("MuSprite");
 
         player.AddComponent(new Transform(100, 100));
-        player.AddComponent(new Sprite(_spriteBatch, playerTexture, Color.White, 4.0f, 4.0f));
+        player.AddComponent(new Sprite(_spriteBatch, playerTexture, new Rectangle(0,0,16, 16) ,Color.White, 4.0f, 4.0f));
         player.AddComponent(new SinMover(5.0f, 1.0f));
         player.Ready();
 

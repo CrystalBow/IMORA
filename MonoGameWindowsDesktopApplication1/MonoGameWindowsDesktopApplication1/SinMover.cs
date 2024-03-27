@@ -12,7 +12,6 @@ namespace Imora
         private Transform transform;
         private float amplitude;
         private float frequency;
-
         public float Amplitude { get => amplitude; set => amplitude = value; }
         public float Frequency { get => frequency; set => frequency = value; }
 
@@ -35,6 +34,7 @@ namespace Imora
         public override void Update(GameTime gameTime)
         {
             transform.Translate(MathF.Cos((float)gameTime.TotalGameTime.TotalMilliseconds * 0.001f * 2 * MathF.PI * frequency) * amplitude, MathF.Sin((float)gameTime.TotalGameTime.TotalMilliseconds * 0.001f * 2 * MathF.PI * frequency) * amplitude);
+            transform.RotateDegrees(5 * (float) gameTime.ElapsedGameTime.TotalSeconds);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Imora
 
         }
 
-        public virtual void onComponentRemove(Component component)
+        public virtual void OnComponentRemove(Component component)
         {
 
         }
