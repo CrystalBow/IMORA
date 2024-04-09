@@ -2,6 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+using Color = Microsoft.Xna.Framework.Color;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace MonoGameWindowsDesktopApplication1;
 
@@ -10,11 +16,20 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Texture2D playerTexture;
-    private GameObject player = new GameObject(0);
+    private ObjectManager objectManager = new ObjectManager();
+    private float screenWidth;
+    private float screenHeight;
+
+    private bool killed = false;
+
+    public float ScreenWidth { get => screenWidth; set => screenWidth = value; }
+    public float ScreenHeight { get => screenHeight; set => screenHeight = value; }
 
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
+        screenWidth = _graphics.PreferredBackBufferWidth;
+        screenHeight = _graphics.PreferredBackBufferHeight;
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -30,11 +45,11 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         playerTexture = Content.Load<Texture2D>("MuSprite");
+        
+        //Add objects here
+        objectManager.AddEntity(new Character(playerTexture, ScreenWidth/2, 150, 4.0f));
 
-        player.AddComponent(new Transform(100, 100));
-        player.AddComponent(new Sprite(_spriteBatch, playerTexture, new Rectangle(0,0,16, 16) ,Color.White, 4.0f, 4.0f));
-        player.AddComponent(new SinMover(5.0f, 1.0f));
-        player.Ready();
+        objectManager.Ready();
 
         // TODO: use this.Content to load your game content here
     }
@@ -47,7 +62,16 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
 
-        player.Update(gameTime);
+        objectManager.Update(gameTime);
+        if (gameTime.TotalGameTime.TotalSeconds >= 12 && !killed)
+        {
+            GameObject player = objectManager.GetGameObject(0);
+            if (player != null)
+            {
+                player.Destroy();
+                killed = true;
+            }
+        }
 
         base.Update(gameTime);
     }
@@ -59,7 +83,7 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         _spriteBatch.Begin(samplerState : SamplerState.PointClamp);
-        player.GetComponent<Sprite>().Draw();
+        objectManager.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);

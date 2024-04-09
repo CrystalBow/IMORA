@@ -17,28 +17,38 @@ namespace Imora
         
         public Transform()
         {
+            TransformSystem.Register(this);
             this.position = Vector2.Zero;
             this.rotation = 0;
         }
         public Transform(Vector2 position) 
         {
+            TransformSystem.Register(this);
             this.position = position;
             this.rotation = 0;
         }
         public Transform(float x, float y)
         {
+            TransformSystem.Register(this);
             this.position = new Vector2(x, y);
             this.rotation = 0;
         }
         public Transform(Vector2 position, float rotation)
         {
+            TransformSystem.Register(this);
             this.position = position;
             this.rotation = rotation;
         }
         public Transform(float x, float y, float rotation)
         {
+            TransformSystem.Register(this);
             this.position = new Vector2(x, y);
             this.rotation = rotation;
+        }
+
+        ~Transform()
+        {
+            TransformSystem.Unregister(this);
         }
 
         public void Translate(float x, float y) 

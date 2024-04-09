@@ -10,21 +10,17 @@ namespace Imora
 {
     internal class GameObject
     {
-        private int _id;
-        private bool _destroyed;
-        private List<Component> _components;
+        private int id;
+        private bool destroyed;
+        private List<Component> components;
 
-        public GameObject(int id)
-        {
-            this._id = id;
-            _destroyed = false;
-            _components = new List<Component>();
-        }
+        public int Id { get => id; set => id = value; }
 
-        //Returns the id of a gameobject
-        public int GetId()
+        public GameObject()
         {
-            return _id;
+            this.Id = Id;
+            destroyed = false;
+            components = new List<Component>();
         }
         
         //Add a component to a gameobject
@@ -35,13 +31,13 @@ namespace Imora
                 return;
             }
             component.Owner = this;
-            _components.Add(component);
+            components.Add(component);
         }
 
         //Returns a specific component reference if it exists
         public T GetComponent<T>() where T : Component 
         { 
-            foreach (Component component in _components) 
+            foreach (Component component in components) 
             { 
                 if (component.GetType() == typeof(T))
                 {
@@ -54,7 +50,7 @@ namespace Imora
         //Returns true if a specific component exists and false otherwise
         public bool HasComponent<T>() where T : Component
         {
-            foreach (Component component in _components)
+            foreach (Component component in components)
             {
                 if (component.GetType() == typeof(T))
                 {
@@ -67,15 +63,15 @@ namespace Imora
         //Delete a specific component if it exists, returns false if unsuccessful
         public bool DeleteComponent<T>() where T : Component
         {
-            for (int i = 0; i < _components.Count; i++)
+            for (int i = 0; i < components.Count; i++)
             {
-                if (_components[i].GetType() == typeof(T))
+                if (components[i].GetType() == typeof(T))
                 {
-                    _components.RemoveAt(i);
+                    components.RemoveAt(i);
                     return true;
                 }
             }
-            foreach (Component component in _components)
+            foreach (Component component in components)
             {
                 component.OnComponentRemove(component);
             }
@@ -85,24 +81,24 @@ namespace Imora
         //Returns the list of components
         public List<Component> GetComponents() 
         {
-            return _components;
+            return components;
         }
 
         //Marks an object to be destroyed
         public void Destroy()
         {
-            _destroyed = true;
+            destroyed = true;
         }
 
         //Returns whether or not the object is destroyed
         public bool GetDestroyed()
         {
-            return _destroyed;
+            return destroyed;
         }
 
         public void Ready()
         {
-            foreach (Component component in _components)
+            foreach (Component component in components)
             {
                 component.Ready();
             }
@@ -110,7 +106,7 @@ namespace Imora
 
         public void Update(GameTime gameTime)
         {
-            foreach (Component component in _components)
+            foreach (Component component in components)
             {
                 component.Update(gameTime);
             }

@@ -16,7 +16,6 @@ namespace Imora
         private Texture2D texture;
         private Vector2 scale;
         private bool visible;
-        private SpriteBatch spriteBatch;
         private Color modulate;
         private Rectangle source;
         private SpriteEffects _effects;
@@ -47,44 +46,49 @@ namespace Imora
             }
         }
 
-        public Sprite(SpriteBatch spriteBatch, Texture2D texture, Rectangle source)
+        public Sprite(Texture2D texture, Rectangle source)
         {
+            SpriteSystem.Register(this);
             this.texture = texture;
             this.scale = Vector2.One;
-            this.spriteBatch = spriteBatch;
             this.modulate = Color.White;
             this.Visible = true;
             this.source = source;
         }
 
-        public Sprite(SpriteBatch spriteBatch, Texture2D texture, Rectangle source, float scaleX, float scaleY)
+        public Sprite(Texture2D texture, Rectangle source, float scaleX, float scaleY)
         {
+            SpriteSystem.Register(this);
             this.texture = texture;
             this.scale = new Vector2(scaleX, scaleY);
-            this.spriteBatch = spriteBatch;
             this.modulate = Color.White;
             this.Visible = true;
             this.source = source;
         }
 
-        public Sprite(SpriteBatch spriteBatch, Texture2D texture,Rectangle source, Color modulate, float scaleX, float scaleY)
+        public Sprite(Texture2D texture,Rectangle source, Color modulate, float scaleX, float scaleY)
         {
+            SpriteSystem.Register(this);
             this.texture = texture;
             this.scale = new Vector2(scaleX, scaleY);
-            this.spriteBatch = spriteBatch;
             this.modulate = modulate;
             this.Visible = true;
             this.source = source;
         }
 
-        public Sprite(SpriteBatch spriteBatch, Texture2D texture, Rectangle source, Color modulate)
+        public Sprite(Texture2D texture, Rectangle source, Color modulate)
         {
+            SpriteSystem.Register(this);
             this.texture = texture;
             this.scale = Vector2.One;
-            this.spriteBatch = spriteBatch;
             this.modulate = modulate;
             this.Visible = true;
             this.source = source;
+        }
+
+        ~Sprite()
+        {
+            SpriteSystem.Unregister(this);
         }
 
         public override void Ready()
@@ -106,7 +110,7 @@ namespace Imora
             transform = null;
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (!Visible)
             {
@@ -117,7 +121,7 @@ namespace Imora
                 spriteBatch.Draw(texture, transform.Position,source, modulate, transform.GetRotationDegrees(), 8 * Vector2.One, scale, _effects, 1);
                 return;
             }
-            spriteBatch.Draw(texture, new Rectangle(0, 0, 16 * (int)scale.X, 16 * (int)scale.Y), modulate);
+            spriteBatch.Draw(texture, Vector2.Zero, source, modulate, transform.GetRotationDegrees(), 8 * Vector2.One, scale, _effects, 1);
         }
     }
 }

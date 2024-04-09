@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Imora
 {
-    internal class SinMover : Component
+    internal class SinMover : Script
     {
         private Transform transform;
         private float amplitude;
@@ -34,7 +34,7 @@ namespace Imora
         public override void Update(GameTime gameTime)
         {
             transform.Translate(MathF.Cos((float)gameTime.TotalGameTime.TotalMilliseconds * 0.001f * 2 * MathF.PI * frequency) * amplitude, MathF.Sin((float)gameTime.TotalGameTime.TotalMilliseconds * 0.001f * 2 * MathF.PI * frequency) * amplitude);
-            transform.RotateDegrees(5 * (float) gameTime.ElapsedGameTime.TotalSeconds);
+            transform.RotateDegrees(10 * (float) gameTime.ElapsedGameTime.TotalSeconds);
         }
     }
 }
